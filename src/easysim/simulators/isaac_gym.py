@@ -577,7 +577,7 @@ class IsaacGym(Simulator):
         ):
             link_lateral_friction = body.get_attr_array("link_lateral_friction", idx)
             for i, prop in enumerate(rigid_shape_props):
-                prop.friction = link_lateral_friction[i]
+                prop.friction = link_lateral_friction[0]
         if (
             not body.attr_array_locked["link_spinning_friction"]
             and body.link_spinning_friction is not None
@@ -585,7 +585,7 @@ class IsaacGym(Simulator):
         ):
             link_spinning_friction = body.get_attr_array("link_spinning_friction", idx)
             for i, prop in enumerate(rigid_shape_props):
-                prop.torsion_friction = link_spinning_friction[i]
+                prop.torsion_friction = link_spinning_friction[0]
         if (
             not body.attr_array_locked["link_rolling_friction"]
             and body.link_rolling_friction is not None
@@ -593,7 +593,7 @@ class IsaacGym(Simulator):
         ):
             link_rolling_friction = body.get_attr_array("link_rolling_friction", idx)
             for i, prop in enumerate(rigid_shape_props):
-                prop.rolling_friction = link_rolling_friction[i]
+                prop.rolling_friction = link_rolling_friction[0]
         if (
             not body.attr_array_locked["link_restitution"]
             and body.link_restitution is not None
@@ -601,7 +601,7 @@ class IsaacGym(Simulator):
         ):
             link_restitution = body.get_attr_array("link_restitution", idx)
             for i, prop in enumerate(rigid_shape_props):
-                prop.restitution = link_restitution[i]
+                prop.restitution = link_restitution[0]
         self._gym.set_actor_rigid_shape_properties(
             self._envs[idx], self._actor_handles[idx][body.name], rigid_shape_props
         )
