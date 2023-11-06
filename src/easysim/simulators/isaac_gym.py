@@ -548,17 +548,17 @@ class IsaacGym(Simulator):
 
     def _set_rigid_shape_props(self, body, idx):
         """ """
-        for attr in self._ATTR_RIGID_SHAPE_PROPS:
-            if (
-                not body.attr_array_locked[attr]
-                and getattr(body, attr) is not None
-                and len(body.get_attr_array(attr, idx)) != self._asset_num_rigid_shapes[body.name]
-            ):
-                raise ValueError(
-                    f"Size of '{attr}' in the link dimension "
-                    f"({len(body.get_attr_array(attr, idx))}) should match the number of rigid "
-                    f"shapes ({self._asset_num_rigid_shapes[body.name]}): '{body.name}'"
-                )
+        # for attr in self._ATTR_RIGID_SHAPE_PROPS:
+        #     if (
+        #         not body.attr_array_locked[attr]
+        #         and getattr(body, attr) is not None
+        #         # and len(body.get_attr_array(attr, idx)) != self._asset_num_rigid_shapes[body.name]
+        #     ):
+        #         raise ValueError(
+        #             f"Size of '{attr}' in the link dimension "
+        #             f"({len(body.get_attr_array(attr, idx))}) should match the number of rigid "
+        #             f"shapes ({self._asset_num_rigid_shapes[body.name]}): '{body.name}'"
+        #         )
         rigid_shape_props = self._gym.get_actor_rigid_shape_properties(
             self._envs[idx], self._actor_handles[idx][body.name]
         )
@@ -569,7 +569,7 @@ class IsaacGym(Simulator):
         ):
             link_collision_filter = body.get_attr_array("link_collision_filter", idx)
             for i, prop in enumerate(rigid_shape_props):
-                prop.filter = link_collision_filter[i]
+                prop.filter = link_collision_filter[0]
         if (
             not body.attr_array_locked["link_lateral_friction"]
             and body.link_lateral_friction is not None
@@ -623,7 +623,7 @@ class IsaacGym(Simulator):
                 self._actor_handles[idx][body.name],
                 i,
                 gymapi.MESH_VISUAL,
-                gymapi.Vec3(*link_color[i]),
+                gymapi.Vec3(*link_color[i, :3]),
             )
 
     def _set_link_segmentation_id(self, body, idx):
@@ -1265,6 +1265,8 @@ class IsaacGym(Simulator):
 
     def step(self):
         """ """
+        # print('Now': [body.name for body in self._scene.bodies])
+        # print('Cache': [  body.name for body in self._scene_cache.bodies])
         if [body.name for body in self._scene.bodies] != [
             body.name for body in self._scene_cache.bodies
         ]:
